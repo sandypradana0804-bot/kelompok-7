@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplikasi Pembelajaran Bahasa Arab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+        /* Gaya Dasar & Animasi */
+        body {
+            box-sizing: border-box;
+        }
+        .fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Efek Interaktif Tombol (Lebih Hidup) */
+        .btn-interact {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-interact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .chapter-card:hover {
+            border-color: #3b82f6; /* blue-500 */
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full bg-gradient-to-br from-indigo-50 to-purple-100 font-sans">
+  <div id="app" class="h-full min-h-screen flex flex-col">
+   <div id="loading" class="h-full w-full flex items-center justify-center">
+    <div class="text-center">
+     <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-purple-600 mx-auto"></div>
+     <p class="mt-4 text-gray-600">Memuat aplikasi...</p>
+    </div>
+   </div>
+   <div id="main-content" class="hidden h-full flex flex-col">
+    <header class="bg-white shadow-lg border-b border-gray-100 px-6 py-4 sticky top-0 z-10">
+     <div class="flex items-center justify-between max-w-6xl mx-auto">
+      <button id="back-btn" class="hidden text-gray-600 hover:text-purple-600 p-2 rounded-full transition duration-150 ease-in-out">
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+       </svg>
+      </button>
+      <h1 id="app-title" class="text-2xl font-extrabold text-purple-800 flex-grow text-center">Aplikasi Pembelajaran Bahasa Arab</h1>
+      <div class="w-10 h-6"></div></div>
+    </header>
+    <main class="flex-1 p-6 overflow-y-auto flex flex-col">
+     <div id="home-page" class="fade-in">
+      <div class="max-w-xl mx-auto text-center bg-white p-10 rounded-2xl shadow-2xl mt-10">
+       <div class="text-6xl mb-6">
+        🌟
+       </div>
+       <h2 id="welcome-message" class="text-3xl md:text-4xl font-extrabold text-purple-800 mb-4">Selamat Datang di Aplikasi Pembelajaran Bahasa Arab</h2>
+       <p class="text-lg text-gray-600 mb-8">Pilih menu di bawah untuk memulai perjalanan belajar Bahasa Arab Anda.</p>
+       
+       <div id="name-list" class="mb-8 p-4 bg-purple-50 rounded-lg shadow-inner">
+           <h3 class="text-xl font-semibold text-purple-700 mb-3">Tim Pengembang:</h3>
+           <ul class="text-gray-700 text-base space-y-1 font-medium">
+               <li>Qanita</li>
+               <li>Mustasyifa Hanif</li>
+               <li>Rofida Afidatul</li>
+               <li>Wanda Sandy Pradana</li>
+           </ul>
+       </div>
+       
+       <div class="space-y-4">
+        <button id="start-learning" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 px-8 rounded-xl text-xl font-bold btn-interact">
+         🚀 Mulai Pembelajaran
+        </button>
+        <button id="exit-app" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-4 px-8 rounded-xl text-xl font-bold btn-interact">
+         🚪 Keluar Aplikasi
+        </button>
+       </div>
+      </div>
+     </div>
+     <div id="dashboard-page" class="hidden fade-in">
+      <div class="max-w-5xl mx-auto">
+       <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Pilih Pembelajaran</h2>
+       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div class="bg-white rounded-xl shadow-md p-6 btn-interact cursor-pointer chapter-btn chapter-card border-2 border-transparent hover:border-blue-500" data-chapter="1">
+         <div class="text-4xl mb-3 text-blue-500">
+          📘
+         </div>
+         <h3 class="text-xl font-semibold text-gray-800">Bab 1</h3>
+         <p class="text-sm text-gray-500">التَّسَوُّقُ</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-md p-6 btn-interact cursor-pointer chapter-btn chapter-card border-2 border-transparent hover:border-blue-500" data-chapter="2">
+         <div class="text-4xl mb-3 text-blue-500">
+          📗
+         </div>
+         <h3 class="text-xl font-semibold text-gray-800">Bab 2</h3>
+         <p class="text-sm text-gray-500">الْمَنَاطِق السياحة</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-md p-6 btn-interact cursor-pointer chapter-btn chapter-card border-2 border-transparent hover:border-blue-500" data-chapter="3">
+         <div class="text-4xl mb-3 text-blue-500">
+          📙
+         </div>
+         <h3 class="text-xl font-semibold text-gray-800">Bab 3</h3>
+         <p class="text-sm text-gray-500">الصِّحَّةُ</p>
+        </div>
+        <div class="bg-green-50 rounded-xl shadow-md p-6 btn-interact cursor-pointer evaluation-btn chapter-card border-2 border-transparent hover:border-green-500" data-evaluation="1">
+         <div class="text-4xl mb-3 text-green-600">
+          ✅
+         </div>
+         <h3 class="text-xl font-semibold text-green-800">Evaluasi 1</h3>
+         <p class="text-sm text-green-600">Ujian Bab 1-3</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-md p-6 btn-interact cursor-pointer chapter-btn chapter-card border-2 border-transparent hover:border-blue-500" data-chapter="4">
+         <div class="text-4xl mb-3 text-blue-500">
+          📘
+         </div>
+         <h3 class="text-xl font-semibold text-gray-800">Bab 4</h3>
+         <p class="text-sm text-gray-500">الأديان في إندونيسia</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-md p-6 btn-interact cursor-pointer chapter-btn chapter-card border-2 border-transparent hover:border-blue-500" data-chapter="5">
+         <div class="text-4xl mb-3 text-blue-500">
+          📗
+         </div>
+         <h3 class="text-xl font-semibold text-gray-800">Bab 5</h3>
+         <p class="text-sm text-gray-500">الْحَجُّ وَالْعُمْرَةُ </p>
+        </div>
+        <div class="bg-white rounded-xl shadow-md p-6 btn-interact cursor-pointer chapter-btn chapter-card border-2 border-transparent hover:border-blue-500" data-chapter="6">
+         <div class="text-4xl mb-3 text-blue-500">
+          📙
+         </div>
+         <h3 class="text-xl font-semibold text-gray-800">Bab 6</h3>
+         <p class="text-sm text-gray-500">تكنولوجيا الإعلام والاتصال</p>
+        </div>
+        <div class="bg-green-50 rounded-xl shadow-md p-6 btn-interact cursor-pointer evaluation-btn chapter-card border-2 border-transparent hover:border-green-500" data-evaluation="2">
+         <div class="text-4xl mb-3 text-green-600">
+          🏆
+         </div>
+         <h3 class="text-xl font-semibold text-green-800">Evaluasi 2</h3>
+         <p class="text-sm text-green-600">Ujian Bab 4-6</p>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div id="chapter-page" class="hidden fade-in">
+      <div class="max-w-xl mx-auto">
+       <h2 id="chapter-title" class="text-3xl font-bold text-gray-800 mb-8 text-center bg-white p-3 rounded-xl shadow-md">Bab 1</h2>
+       <div class="grid grid-cols-2 gap-6">
+        <button class="bg-white rounded-xl shadow-lg p-6 btn-interact text-center border-b-4 border-red-500 hover:border-red-700" id="hiwar-btn">
+         <div class="text-4xl mb-2">
+          🗣️
+         </div>
+         <h3 class="text-lg font-semibold text-gray-800">Hiwar (Video/Teks)</h3>
+        </button>
+        <button class="bg-white rounded-xl shadow-lg p-6 btn-interact text-center border-b-4 border-blue-500 hover:border-blue-700" id="mufradat-btn">
+         <div class="text-4xl mb-2">
+          📚
+         </div>
+         <h3 class="text-lg font-semibold text-gray-800">Mufradat (Kosa Kata)</h3>
+        </button>
+        <button class="bg-white rounded-xl shadow-lg p-6 btn-interact text-center border-b-4 border-purple-500 hover:border-purple-700" id="qawaid-btn">
+         <div class="text-4xl mb-2">
+          📖
+         </div>
+         <h3 class="text-lg font-semibold text-gray-800">Qawaid (Kaidah)</h3>
+        </button>
+        <button class="bg-white rounded-xl shadow-lg p-6 btn-interact text-center border-b-4 border-teal-500 hover:border-teal-700" id="qiraah-btn">
+         <div class="text-4xl mb-2">
+          📄
+         </div>
+         <h3 class="text-lg font-semibold text-gray-800">Teks Qiraah</h3>
+        </button>
+        <button class="bg-white rounded-xl shadow-lg p-6 btn-interact text-center border-b-4 border-yellow-500 hover:border-yellow-700 col-span-2" id="latihan-soal-btn">
+         <div class="text-4xl mb-2">
+          📝
+         </div>
+         <h3 class="text-lg font-semibold text-gray-800">Latihan Soal</h3>
+        </button>
+       </div>
+      </div>
+     </div>
+     <div id="evaluation-page" class="hidden fade-in">
+      <div class="max-w-2xl mx-auto text-center">
+       <h2 id="evaluation-title" class="text-3xl font-bold text-gray-800 mb-8 bg-white p-3 rounded-xl shadow-md">Evaluasi 1</h2>
+       <div class="bg-white rounded-2xl shadow-2xl p-8">
+        <div class="text-6xl mb-6 text-green-600">
+         ⭐
+        </div>
+        <h3 class="text-2xl font-semibold text-gray-800 mb-4">Siap untuk Evaluasi?</h3>
+        <p class="text-gray-600 mb-8">Klik tombol di bawah untuk mengakses form evaluasi</p>
+        <div class="space-y-4">
+         <button id="open-evaluation" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 px-6 rounded-xl text-xl font-bold btn-interact disabled:bg-gray-400">
+          Buka Evaluasi Sekarang
+         </button>
+        </div>
+       </div>
+      </div>
+     </div>
+     
+     <div id="content-viewer-page" class="hidden fade-in flex-1 flex flex-col max-w-6xl mx-auto w-full">
+      <h2 id="viewer-title" class="text-3xl font-bold text-gray-800 mb-6 text-center bg-white p-3 rounded-xl shadow-md">Judul Konten</h2>
+      <div class="flex-1 w-full bg-white rounded-xl shadow-2xl overflow-hidden mb-6">
+       <iframe id="content-iframe" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen data-origin=""></iframe>
+      </div>
+     </div>
+     </main>
+   </div>
+  </div>
+  <script>
+        // Data Statis disesuaikan dengan format link embed
+        const STATIC_CONTENT = {
+            "chapter_1": {
+                // Semua tautan file Drive menggunakan format embed /preview
+                "hiwar": { title: "Video Hiwar Bab 1", link_url:"https://drive.google.com/file/d/12LB_tn93Uv2vtuRF5a9D8OYGURCtqaqq/preview" }, 
+                "qawaid": { title: "Video Materi Bab 1", link_url: "https://drive.google.com/file/d/1Y36Z-kAFqrHFmYCaYAyixDTgJss9cHE9/preview" }, 
+                "mufradat": { 
+                    title: "Mufradat Bab 1", 
+                    link_url:"https://drive.google.com/file/d/1HG_zbKwaYlYz4q3thCygSnA1MU5lpBdl/preview", 
+                }, 
+                "teks-qiraah": { 
+                    title: "Teks Qiraah Bab 1", 
+                    link_url: "https://drive.google.com/file/d/1MfJIlJ2FnuuUGVax3Be6yxv74Eta94Kc/preview", 
+                },
+                // Google Docs Link: Disarankan untuk diubah ke /preview jika memungkinkan untuk embed.
+                "exercise": { title: "Latihan Soal Bab 1", link_url: "https://docs.google.com/document/d/1Wv_kA1tu5FUEvP2rnCfWyFndZWIsBs9Q/edit?usp=drive_link&ouid=112748419239428490654&rtpof=true&sd=true" },
+            },
+            "chapter_2": {
+                "hiwar": { title: "Video Hiwar Bab 2", link_url: "https://drive.google.com/file/d/1My3ax-7GRPxb-1or_7oc6gYDY5QZcyCa/preview" }, 
+                "qawaid": { title: "Video Materi Bab 2", link_url: "https://drive.google.com/file/d/1P9VhBvhmooqPMhGWRTg8vdTXap0Sm9eX/preview" }, 
+                "mufradat": { title: "Mufradat Bab 2", link_url: "https://drive.google.com/file/d/1WvyvAbarluhn1zuLnVigMRw2CUSPVs3Z/preview" }, 
+                "teks-qiraah": { title: "Teks Qiraah Bab 2", link_url: "https://drive.google.com/file/d/1kjX6AKRf0TIdyCwlHRwnRbNY6w1Ze2MA/preview" }, 
+                "exercise": { title: "Latihan Soal Bab 2", link_url: "https://docs.google.com/document/d/1wq7Q7oa4Yp-gRwExSvC8vRAq2PZYLoR0/edit?usp=drive_link&ouid=112748419239428490654&rtpof=true&sd=true" },
+            },
+            "chapter_3": { 
+                 "hiwar": { title: "Video Hiwar Bab 3", link_url: "https://drive.google.com/file/d/1xONFnflAZ-HcK8m216wWWugkart8CLNR/preview" }, 
+                 "qawaid": { title: "Video Materi Bab 3", link_url: "https://drive.google.com/file/d/1_4W3VZM4jAjGMkl6M8c8JpFXXuLzF8Cx/preview" }, 
+                 "mufradat": { title: "Mufradat Bab 3", link_url: "https://drive.google.com/file/d/1gXvLNjoDbRBBkUl8oV2Y6uKZ_CugnJhw/preview" }, 
+                 "teks-qiraah": { title: "Teks Qiraah Bab 3", link_url: "https://drive.google.com/file/d/1ZpGEmk7eLpcVE5Kq6EqONxz1isCKhALR/preview" }, 
+                 "exercise": { title: "Latihan Soal Bab 3", link_url: "https://drive.google.com/file/d/1cgryPLqCp1VM1Z_bYMBxZegNvknNO_NQ/preview" }, 
+            },
+            "chapter_4": { 
+                 "hiwar": { title: "Video Hiwar Bab 4", link_url: "https://drive.google.com/file/d/1K8cCThoBeQfdQWV9_lbRMzuzj8A72aop/preview" }, 
+                 "qawaid": { title: "Video Materi Bab 4", link_url: "https://drive.google.com/file/d/1uSc_i4UqzsANcz9kAVfxX1czYHtiQVC7/preview" }, 
+                 "mufradat": { title: "Mufradat Bab 4", link_url: "https://drive.google.com/file/d/1O1xh5yza6WDIryH9ngntmFjhqopCu1V2/preview" }, 
+                 "teks-qiraah": { title: "Teks Qiraah Bab 4", link_url: "https://drive.google.com/file/d/1mOOO95mN_pfr3uYfclu1XB3Xn-obVKZJ/preview" }, 
+                 "exercise": { title: "Latihan Soal Bab 4", link_url: "https://docs.google.com/document/d/1kg5b8uNFP9O0SzK-jbmgfArJA4XHe4kS/edit?usp=drive_link&ouid=112748419239428490654&rtpof=true&sd=true" },
+            },
+            "chapter_5": { 
+                 "hiwar": { title: "Video Hiwar Bab 5", link_url: "https://drive.google.com/file/d/1CtXyOFAV39I-8radNuYf8Xx0POFkNLQ4/preview" }, 
+                 "qawaid": { title: "Video Materi Bab 5", link_url: "https://drive.google.com/file/d/1cjuMGKe5pXncMoDerkYq8AX5QJfrlQjq/preview" }, 
+                 "mufradat": { title: "Mufradat Bab 5", link_url: "https://drive.google.com/file/d/1QNagC1nHSD4NlCWKzZWY9Ed4ILBMudhS/preview" }, 
+                 "teks-qiraah": { title: "Teks Qiraah Bab 5", link_url: "https://drive.google.com/file/d/1utvVrEcgX5l7bdjZGK5Ua9D_b_85Buv0/preview" },
+                 "exercise": { title: "Latihan Soal Bab 5", link_url: "https://drive.google.com/file/d/1vj-jx0oZxZa8Dr5vhXg06aT1XQ6FAosi/preview" }, 
+            },
+            "chapter_6": { 
+                 "hiwar": { title: "Video Hiwar Bab 6", link_url: "https://drive.google.com/file/d/17cy1EVFwH1JkwNAR9EnDXpZe1dq9p5Fn/preview" }, 
+                 // Tautan Qawaid Bab 6 sudah diubah ke format Drive
+                 "qawaid": { title: "Video Materi Bab 6 (Drive)", link_url: "https://drive.google.com/file/d/GANTI_ID_FILE_QAWAIID_ANDA/preview" }, 
+                 // Tautan Mufradat Bab 6 sudah diubah ke format Drive
+                 "mufradat": { title: "Mufradat Bab 6 (Drive)", link_url: "https://drive.google.com/file/d/GANTI_DENGAN_FILE_ID_ANDA/preview" }, 
+                 "teks-qiraah": { title: "Teks Qiraah Bab 6", link_url: "https://drive.google.com/file/d/1koO4CSjafKezbzg3dRPRmSTpJmaU0eaB/preview" }, 
+                 "exercise": { title: "Latihan Soal Bab 6", link_url: "https://docs.google.com/document/d/1-QfNH9__lFKl764glfR-lq1apfH6Zft6/edit?usp=drive_link&ouid=112748419239428490654&rtpof=true&sd=true" },
+            },
+            "evaluation_1": {
+                title: "Evaluasi 1",
+                form_url: "https://docs.google.com/forms/d/e/1FAIpQLScf6tWJgdZRRpZcmzphq_eLydybRee7zlA8QCzYIXX_sg555Ow/viewform?embedded=true" // Tautan Google Forms Embed
+            },
+            "evaluation_2": {
+                title: "Evaluasi 2",
+                form_url: "https://docs.google.com/forms/d/e/1FAIpQLSc2EgnXjcVl1RZO8eOIg4H5JwMpVMN1YADiZva_c198iTs1xg/viewform?embedded=true" // Tautan Google Forms Embed
+            }
+        };
+
+        // Salin semua Global State dan FUNGSI Navigasi yang sama
+        let currentPage = 'home';
+        let currentChapter = 1;
+        let currentEvaluation = 1;
+
+        function getStaticContent(type, chapterOrEval) {
+            let key = type === 'evaluation' ? `evaluation_${chapterOrEval}` : `chapter_${chapterOrEval}`;
+            const contentData = STATIC_CONTENT[key];
+            if (!contentData) return null;
+            return contentData;
+        }
+
+        function showPage(pageId) {
+            const pages = ['home-page', 'dashboard-page', 'chapter-page', 'evaluation-page', 'content-viewer-page'];
+            pages.forEach(page => {
+                const element = document.getElementById(page);
+                if (element) element.classList.add('hidden');
+            });
+            const targetElement = document.getElementById(pageId);
+            if (targetElement) targetElement.classList.remove('hidden');
+            
+            const backBtn = document.getElementById('back-btn');
+            if (pageId === 'home-page') {
+                backBtn.classList.add('hidden');
+            } else {
+                backBtn.classList.remove('hidden');
+            }
+        }
+
+        function goBack() {
+            const iframe = document.getElementById('content-iframe');
+            
+            if (currentPage === 'content-viewer') {
+                // Kembali dari Content Viewer ke halaman asalnya (Chapter atau Evaluation)
+                const origin = iframe.dataset.origin;
+                iframe.src = ''; // Bersihkan iframe src agar tidak memori
+                if (origin === 'chapter') {
+                    currentPage = 'chapter';
+                    showPage('chapter-page');
+                } else if (origin === 'evaluation') {
+                    currentPage = 'evaluation';
+                    showPage('evaluation-page');
+                } else {
+                    // Fallback jika data-origin hilang
+                    currentPage = 'dashboard';
+                    showPage('dashboard-page');
+                }
+            } else if (currentPage === 'chapter' || currentPage === 'evaluation') {
+                currentPage = 'dashboard';
+                showPage('dashboard-page');
+            } else if (currentPage === 'dashboard') {
+                currentPage = 'home';
+                showPage('home-page');
+            }
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white z-50 shadow-xl ${
+                type === 'success' ? 'bg-green-500' : 'bg-red-500'
+            }`;
+            messageDiv.textContent = message;
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        }
+
+        /**
+         * Membuka konten (Chapter atau Evaluation) di dalam Iframe.
+         */
+        function openContentInIframe(type, contentType, chapterOrEval) {
+            let title = '';
+            let url = '';
+
+            if (type === 'chapter') {
+                const contentData = getStaticContent('chapter', chapterOrEval);
+                const content = contentData ? contentData[contentType] : null;
+                if (content && content.link_url) {
+                    url = content.link_url;
+                    title = content.title || `${contentType.toUpperCase().replace('-', ' ')} Bab ${chapterOrEval}`;
+                }
+            } else if (type === 'evaluation') {
+                const contentData = getStaticContent('evaluation', chapterOrEval);
+                if (contentData && contentData.form_url) {
+                    url = contentData.form_url;
+                    title = contentData.title || `Evaluasi ${chapterOrEval}`;
+                }
+            }
+
+            if (url && url.startsWith('http')) {
+                currentPage = 'content-viewer';
+                const iframe = document.getElementById('content-iframe');
+                
+                // Set data attribute untuk tahu ke mana harus kembali saat tombol back ditekan
+                iframe.dataset.origin = type; 
+
+                document.getElementById('viewer-title').textContent = title;
+                iframe.src = url;
+                showPage('content-viewer-page');
+            } else {
+                showMessage(`Link ${title || contentType} belum tersedia atau tidak valid!`, "error");
+            }
+        }
+
+
+        // --- Event Listeners ---
+        document.addEventListener('DOMContentLoaded', () => {
+             // Inisialisasi
+             document.getElementById('loading').classList.add('hidden');
+             document.getElementById('main-content').classList.remove('hidden');
+
+            // Home page navigation
+            document.getElementById('start-learning').addEventListener('click', () => {
+                currentPage = 'dashboard';
+                showPage('dashboard-page');
+            });
+
+            document.getElementById('exit-app').addEventListener('click', () => {
+                showMessage("Terima kasih telah menggunakan aplikasi pembelajaran!", "success");
+            });
+
+            // Back button
+            document.getElementById('back-btn').addEventListener('click', goBack);
+
+            // Chapter buttons
+            document.querySelectorAll('.chapter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentChapter = parseInt(btn.dataset.chapter);
+                    currentPage = 'chapter';
+                    document.getElementById('chapter-title').textContent = `Bab ${currentChapter}`;
+                    showPage('chapter-page');
+                });
+            });
+
+            // Evaluation buttons
+            document.querySelectorAll('.evaluation-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentEvaluation = parseInt(btn.dataset.evaluation);
+                    currentPage = 'evaluation';
+                    document.getElementById('evaluation-title').textContent = `Evaluasi ${currentEvaluation}`;
+                    showPage('evaluation-page');
+                });
+            });
+            
+            // --- Handlers Menu Bab (Semua menggunakan Iframe) ---
+            document.getElementById('hiwar-btn').addEventListener('click', () => {
+                openContentInIframe('chapter', 'hiwar', currentChapter);
+            });
+
+            document.getElementById('mufradat-btn').addEventListener('click', () => {
+                openContentInIframe('chapter', 'mufradat', currentChapter);
+            });
+
+            document.getElementById('qawaid-btn').addEventListener('click', () => {
+                openContentInIframe('chapter', 'qawaid', currentChapter);
+            });
+
+            document.getElementById('qiraah-btn').addEventListener('click', () => {
+                openContentInIframe('chapter', 'teks-qiraah', currentChapter);
+            });
+
+            document.getElementById('latihan-soal-btn').addEventListener('click', () => {
+                openContentInIframe('chapter', 'exercise', currentChapter);
+            });
+
+            // --- Handler Buka Evaluasi (Menggunakan Iframe) ---
+            document.getElementById('open-evaluation').addEventListener('click', () => {
+                openContentInIframe('evaluation', null, currentEvaluation);
+            });
+        });
+    </script>
+ </body>
+</html>
